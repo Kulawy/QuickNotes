@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="list_item_note">#48FFFFFF</color>
+    <color name="list_item_test_first">#FFFFFF</color>
+    <color name="list_item_test_second">#8A8787</color>
+</resources>

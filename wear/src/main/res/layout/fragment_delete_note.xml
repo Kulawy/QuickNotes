@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.jgeron.quicknotes.view.DeleteNoteFragment">
+
+    <TextView
+        android:id="@+id/deleteNoteFragment_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin_l"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_notification_content"
+        android:text="@string/delete_note_title" />
+
+    <androidx.wear.widget.CircularProgressLayout
+        android:id="@+id/deleteNoteFragment_dcv_confirmation"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_l"
+        android:padding="@dimen/padding_m"
+        app:strokeWidth="@dimen/delete_circle_border_width"
+        app:backgroundColor="@color/red_a200"
+        app:colorSchemeColors="@color/dark_red"
+        >
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_close_white_64"
+            />
+
+    </androidx.wear.widget.CircularProgressLayout>
+
+</LinearLayout>
