@@ -6,8 +6,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.jgeron.quicknotes.data.Note
 import com.jgeron.quicknotes.data.INotesRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class NotesViewModel constructor(
     repository: INotesRepository
@@ -27,12 +32,16 @@ class NotesViewModel constructor(
 
     init {
         //Log.d(TAG, "VIEW MODEL CREATED")
-        notesList = repository.getAllNotes()
+        runBlocking {
+            notesList = repository.getAllNotes()
+        }
     }
 
     fun addNote(title: String){
         val note = Note(System.currentTimeMillis().toString(), title, "-")
-        notesRepository.saveNote(note)
+        viewModelScope.launch(Dispatchers.IO){
+            notesRepository.saveNote(note)
+        }
         notesList.add(note)
         _noteLiveData.postValue(note)
         //_notesLiveData.postValue(notesList)
@@ -43,15 +52,19 @@ class NotesViewModel constructor(
         val note = notesList.first {
             it.id == id
         }
-        notesRepository.removeNote(id)
+        viewModelScope.launch(Dispatchers.IO){
+            notesRepository.removeNote(id)
+        }
         notesList.remove(note)
         _noteLiveData.postValue(note)
         //_notesLiveData.postValue(notesList)
     }
 
     fun updateNotesListFromStore(){
-        notesList = notesRepository.getAllNotes()
-        _notesLiveData.postValue(notesList)
+        viewModelScope.launch(Dispatchers.IO){
+            notesList = notesRepository.getAllNotes()
+            _notesLiveData.postValue(notesList)
+        }
     }
 
 }

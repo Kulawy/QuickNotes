@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.preference.PreferenceManager
 import com.jgeron.quicknotes.data.Note
 import com.jgeron.quicknotes.data.INotesRepository
+import java.lang.ref.WeakReference
 
 /**
  * A  NotesSharedPreferencesHandler class used to Store data.
@@ -13,18 +14,18 @@ import com.jgeron.quicknotes.data.INotesRepository
  * I am implement it in this way because I want to have clean INotesRepository storage
  * but I don't want to use any DI tools like Dagger or Hilt to create VM
  */
-class NotesSharedPreferencesHandler private constructor(val context: Context) : INotesRepository{
+class NotesSharedPreferencesHandler private constructor(val context: WeakReference<Context>  ) : INotesRepository{
 
     private val TAG = "NotesSharedPreferencesHandler"
 
     companion object{
         fun bind(context: Context): NotesSharedPreferencesHandler{
-            return NotesSharedPreferencesHandler(context)
+            return NotesSharedPreferencesHandler(WeakReference(context))
         }
     }
 
-    override fun saveNote(note: Note) : String {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    override suspend fun saveNote(note: Note) : String {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.get())
         val editor = sharedPreferences.edit()
 
         editor.putStringSet(note.id, mutableSetOf(note.title, note.description))
@@ -33,8 +34,8 @@ class NotesSharedPreferencesHandler private constructor(val context: Context) : 
         return note.id
     }
 
-    override fun getAllNotes() : MutableList<Note>{
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    override suspend fun getAllNotes() : MutableList<Note>{
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.get())
         val notesList: MutableList<Note> = ArrayList()
         val dataSet = sharedPreferences.all
         dataSet.forEach{
@@ -48,8 +49,8 @@ class NotesSharedPreferencesHandler private constructor(val context: Context) : 
         return notesList
     }
 
-    override fun removeNote(id: String){
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    override suspend fun removeNote(id: String){
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.get())
         val editor = sharedPreferences.edit()
         editor.remove(id);
         editor.apply()

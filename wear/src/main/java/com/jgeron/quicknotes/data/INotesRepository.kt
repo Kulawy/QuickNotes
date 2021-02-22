@@ -9,8 +9,8 @@ interface INotesRepository {
 //    fun getAllNotes(context: Context) : MutableList<Note>
 //    fun removeNote(id: String, context: Context)
 
-    fun saveNote(note: Note) : String
-    fun getAllNotes() : MutableList<Note>
-    fun removeNote(id: String)
+    suspend fun saveNote(note: Note) : String
+    suspend fun getAllNotes() : MutableList<Note>
+    suspend fun removeNote(id: String)
 
 }
